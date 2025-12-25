@@ -1,0 +1,25 @@
+.main-container {
+	width: 50%;
+	margin: 0 auto;
+	border: 1px solid black;
+}
+.header {
+	border: 1px solid black;
+	padding: 10px;
+	text-align: center;
+}
+.columns-container {
+	display: flex;
+}
+.column-left {
+	flex: 1;
+	border: 1px solid black;
+	padding: 10px;
+	text-align: center;
+}
+.column-right {
+	flex: 2;
+	border: 1px solid black;
+	padding: 10px;
+	text-align: center;
+}

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>Two Column Layout with Header</title>
+		<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+		<script src="{{ url_for('static', filename='index.js') }}" defer></script>
+		<script src="https://unpkg.com/htmx.org@2.0.3"></script>
+	</head>
+	<body>
+		<div class="main-container">
+			<div class="header">Header Row</div>
+			<div class="columns-container">
+				<div class="column-left">Column 1</div>
+				<div class="column-right">
+					<form hx-post="/predict-book" hx-target="#result" enctype="multipart/form-data">
+						<label style="display: block; width: 100%">
+							Title
+							<input type="text" name="title">
+						</label>
+
+						<label style="display: block; width: 100%">
+							Author
+							<input type="text" name="author">
+						</label>
+
+						<label style="display: block; width: 100%">
+							Book
+							<input type="file" name="book">
+						</label>
+
+						<br />
+
+						<input type="submit" value="Predict Book">
+					</form>
+
+					<div id="result"></div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
