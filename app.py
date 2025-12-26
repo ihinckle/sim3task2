@@ -12,7 +12,7 @@ text_processor = TextProcessor()
 model = joblib.load('./model/ai-text-detector-model.pkl')
 
 @app.route('/')
-def hello_world():  # put application's code here
+def home_page():  # put application's code here
 	return render_template('index.html.j2')
 
 @app.route('/predict-book', methods=['POST'])
@@ -20,19 +20,18 @@ def predict_book():
 	uploaded_file = request.files.get('book')
 
 	if uploaded_file is None:
-		return 'uploaded file error'
+		return 'Uploaded file error'
 	
 	book_file = io.BytesIO(uploaded_file.read())
-
 	book = epub.read_epub(book_file)
 
-	if book:
-		full_text = get_book_text(book)
-		cleaned_text = text_processor.full_clean(full_text)
+	if book is None:
+		return 'Epub file error'
 
-		return str(model.predict([cleaned_text])[0])
+	full_text = get_book_text(book)
+	cleaned_text = text_processor.full_clean(full_text)
 
-	return 'error'
+	return render_template('prediction-response.html.j2', result=model.predict([cleaned_text])[0])
 
 
 if __name__ == '__main__':

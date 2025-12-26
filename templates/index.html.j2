@@ -13,26 +13,35 @@
 			<div class="columns-container">
 				<div class="column-left">Column 1</div>
 				<div class="column-right">
-					<form hx-post="/predict-book" hx-target="#result" enctype="multipart/form-data">
+					<form hx-post="/predict-book"
+						  hx-target="#result"
+						  hx-indicator="#loading-spinner"
+						  hx-on-htmx-before-request="document.getElementById('result').innerHTML = ''"
+						  enctype="multipart/form-data">
 						<label style="display: block; width: 100%">
 							Title
-							<input type="text" name="title">
+							<input type="text" name="title" required>
 						</label>
 
 						<label style="display: block; width: 100%">
 							Author
-							<input type="text" name="author">
+							<input type="text" name="author" required>
 						</label>
 
 						<label style="display: block; width: 100%">
 							Book
-							<input type="file" name="book">
+							<input type="file" name="book" required>
 						</label>
 
 						<br />
 
 						<input type="submit" value="Predict Book">
 					</form>
+
+					<div id="loading-spinner" class="htmx-indicator">
+						<div class="spinner"></div>
+						<p>Analyzing book text, please wait...</p>
+					</div>
 
 					<div id="result"></div>
 				</div>
