@@ -32,12 +32,22 @@ def predict_book():
 	if book is None:
 		return 'Epub file error'
 
+	title = book.get_metadata('DC', 'title')[0][0]
+	author = book.get_metadata('DC', 'creator')[0][0]
+
+	exists = db.session.query(Prediction).filter_by(title=title, author=author).first()
+
+	if exists:
+		return 'Submitted before'
+
 	full_text = get_book_text(book)
 	cleaned_text = text_processor.full_clean(full_text)
 
 	result = model.predict([cleaned_text])[0]
 
-	db.session.add(Prediction(title=request.form.get('title'), author=request.form.get('author'), result=result))
+	db.session.add(Prediction(title=title,
+							  author=author,
+							  result=result))
 	db.session.commit()
 
 	return render_template('prediction-response.html.j2', result=result)
