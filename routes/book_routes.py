@@ -4,7 +4,7 @@ import ebooklib
 import joblib
 from bs4 import BeautifulSoup
 from ebooklib import epub
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, jsonify
 
 from db.models import Prediction, db
 from utils import TextProcessor
@@ -38,7 +38,13 @@ def predict_book():
 	exists = db.session.query(Prediction).filter_by(title=title, author=author).first()
 
 	if exists:
-		return 'Submitted before'
+		return jsonify({
+			"success": True,
+			"result": exists.result,
+			"title": exists.title,
+			"author": exists.author,
+			"exists": True
+		})
 
 	full_text = get_book_text(book)
 	cleaned_text = text_processor.full_clean(full_text)
@@ -50,7 +56,12 @@ def predict_book():
 							  result=result))
 	db.session.commit()
 
-	return render_template('prediction-response.html.j2', result=result)
+	return jsonify({
+		"success": True,
+		"result": result,
+		"title": title,
+		"author": author
+	})
 
 
 def get_book_text(book):

@@ -1,0 +1,11 @@
+<div x-data>
+	<div class="tool">
+		<i data-lucide="bot" class="result-icon"
+		   :class="{ 'ai': $store.app.lastResult.result === 1.0, 'inactive': $store.app.lastResult.result !== 1.0 }"></i>
+
+		 <img src="{{ url_for('static', filename='logo.png') }}" alt="Logo" height="100">
+
+		<i data-lucide="user" class="result-icon"
+		   :class="{ 'human': $store.app.lastResult.result === 0.0, 'inactive': $store.app.lastResult.result !== 0.0 }"></i>
+	</div>
+</div>

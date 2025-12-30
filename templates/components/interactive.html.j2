@@ -1,0 +1,60 @@
+<div class="interactive" x-data="{
+		fileName: 'Select EPUB file...',
+		prediction: null,
+		error: null,
+
+		doAgain() {
+			this.fileName = 'Select EPUB file...';
+			this.prediction = null;
+			this.$refs.uploadForm.reset();
+			Alpine.store('app').setState('init');
+			Alpine.store('app').setResult({result: null});
+		},
+
+		async submitForm() {
+			Alpine.store('app').setState('working');
+			this.error = null;
+			this.prediction = null;
+
+			const formData = new FormData(this.$refs.uploadForm);
+
+			try {
+				const response = await fetch('/predict-book', {
+					method: 'POST',
+					body: formData
+				});
+
+				const data = await response.json();
+
+				if (data.success) {
+					this.prediction = data;
+					Alpine.store('app').setResult(data);
+					Alpine.store('app').setState('result');
+				} else {
+					this.error = 'Something went wrong.';
+				}
+			} catch (err) {
+				this.error = 'Network error. Please try again.';
+			} finally {
+				// Re-initialize Lucide icons if any were added dynamically
+				this.$nextTick(() => lucide.createIcons());
+			}
+		}
+	}">
+    <form x-show="$store.app.state === 'init'" x-ref="uploadForm" @submit.prevent="submitForm()" enctype="multipart/form-data">
+        <label class="sos-file-upload">
+            <input type="file" name="book" required
+                   @change="fileName = $event.target.files[0].name"/>
+            <span x-text="fileName"></span>
+        </label>
+
+        <br />
+
+        <input type="submit" class="sos-submit-btn">
+    </form>
+
+	<button x-show="$store.app.state === 'result'" @click="doAgain()" class="sos-submit-btn">Do Another</button>
+
+    <!-- Error Display -->
+    <div x-show="error" class="error-msg" x-text="error"></div>
+</div>
