@@ -40,3 +40,21 @@ class TextProcessor:
         text = self.remove_punc(text)
         text = self.remove_stopwords(text)
         return text
+
+    def get_descriptive_stats(self, text):
+        sentences = text.split('.')
+        words = text.split()
+        
+        if not words or not sentences:
+            return {}
+
+        avg_sentence_length = len(words) / len(sentences)
+        unique_words = len(set(words))
+        lexical_density = (unique_words / len(words)) * 100
+
+        return {
+            "avg_sentence_length": round(avg_sentence_length, 2),
+            "lexical_richness": f"{round(lexical_density, 2)}%",
+            "total_word_count": len(words),
+            "total_sentences": len(sentences)
+        }

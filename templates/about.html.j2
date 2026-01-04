@@ -1,0 +1,16 @@
+{% extends "index.html.j2" %}
+
+{% block content %}
+	<p>The tool was built using a data set of human identified and AI identified texts. The count seen below. 0.0
+		Represents a human authored text and 1.0 represents an AI generated text.</p>
+
+	<img class="data-image" src="{{ url_for('static', filename='human-vs-ai.png') }}"
+		 alt="Bar graph of human and ai rows in the data set." />
+
+	<p>Below is the classification or accuracy report for the model. The data set was split into two portions, the model
+	was trained on one and tested on the other. The most important part is the .96 accuracy row. This means that the
+	model is expected to be correct 96% of the time.</p>
+
+	<img class="data-image" src="{{ url_for('static', filename='classification-report.png') }}"
+		 alt="Accuracy report for the model built." />
+{% endblock %}

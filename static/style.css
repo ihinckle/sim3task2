@@ -107,7 +107,30 @@ body {
     text-align: center;
 }
 
+.data-image {
+	width: 100%;
+}
+
 /* Prevent Alpine elements from flashing on load */
 [x-cloak] {
     display: none !important;
+}
+
+.navigation {
+	display: flex;
+	justify-content: space-between;
+	padding: 0 !important;
+}
+
+.navigation a {
+	display: block;
+	padding: 10px;
+	width: 100%;
+	text-decoration: none;
+	background-color: #B3D467;
+	color: #183029;
+}
+
+.navigation a:hover {
+	background-color: #7ED957;
 }

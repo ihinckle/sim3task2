@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from ebooklib import epub
 from flask import Blueprint, render_template, request, jsonify
 
-from db.models import Prediction, db
+from db.models import SosPrediction, db, SosError
 from utils import TextProcessor
 
 book_bp = Blueprint('book_bp', __name__)
@@ -16,7 +16,15 @@ text_processor = TextProcessor()
 
 @book_bp.route('/')
 def home_page():  # put application's code here
-	return render_template('index.html.j2')
+	return render_template('predict.html.j2')
+
+@book_bp.route('/about')
+def about_page():
+	return render_template('about.html.j2')
+
+@book_bp.route('/monitor')
+def monitor_page():
+	return render_template('monitor.html.j2')
 
 
 @book_bp.route('/predict-book', methods=['POST'])
@@ -26,16 +34,23 @@ def predict_book():
 	if uploaded_file is None:
 		return 'Uploaded file error'
 
+	if not uploaded_file.filename.lower().endswith('.epub'):
+		db.session.add(SosError(error=f"Invalid file extension for {uploaded_file.filename}"))
+		db.session.commit()
+		return jsonify({"success": False, "error": "Invalid file extension. Please upload an EPUB file."}), 400
+
 	book_file = io.BytesIO(uploaded_file.read())
 	book = epub.read_epub(book_file)
 
 	if book is None:
-		return 'Epub file error'
+		db.session.add(SosError(error=f"There was an issue reading the epub file {uploaded_file.filename}"))
+		db.session.commit()
+		return jsonify({"success": False, "error": "There was an issue reading the epub file."}), 400
 
 	title = book.get_metadata('DC', 'title')[0][0]
 	author = book.get_metadata('DC', 'creator')[0][0]
 
-	exists = db.session.query(Prediction).filter_by(title=title, author=author).first()
+	exists = db.session.query(SosPrediction).filter_by(title=title, author=author).first()
 
 	if exists:
 		return jsonify({
@@ -51,14 +66,17 @@ def predict_book():
 
 	result = model.predict([cleaned_text])[0]
 
-	db.session.add(Prediction(title=title,
-							  author=author,
-							  result=result))
+	descriptive_stats = text_processor.get_descriptive_stats(full_text)
+
+	db.session.add(SosPrediction(title=title,
+								 author=author,
+								 result=result))
 	db.session.commit()
 
 	return jsonify({
 		"success": True,
 		"result": result,
+		"analysis": descriptive_stats,
 		"title": title,
 		"author": author
 	})

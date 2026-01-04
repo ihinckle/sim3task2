@@ -15,5 +15,12 @@
 		<p>Title: <span x-text="$store.app.lastResult.title"></span></p>
 		<p>Author: <span x-text="$store.app.lastResult.author"></span></p>
 		<p>Result: <span x-text="$store.app.lastResult.result === 1.0 ? 'Likely AI' : 'Likely Human'"></span></p>
+
+		<div x-show="$store.app.lastResult.analysis">
+			<p>Avg Sentence Length: <span x-text="$store.app.lastResult.analysis.avg_sentence_length"></span></p>
+			<p>Lexical Richness: <span x-text="$store.app.lastResult.analysis.lexical_richness"></span></p>
+			<p>Word Count: <span x-text="$store.app.lastResult.analysis.total_word_count"></span></p>
+			<p>Total Sentences: <span x-text="$store.app.lastResult.analysis.total_sentences"></span></p>
+		</div>
 	</div>
 </div>

@@ -2,19 +2,21 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8">
-		<title>Two Column Layout with Header</title>
+		<title>City Library AI Prediction Tool</title>
 		<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-		<script src="https://unpkg.com/htmx.org@2.0.3"></script>
 		<script src="https://unpkg.com/lucide@latest"></script>
 		<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
 	</head>
 	<body>
 		<div class="sos-main">
-			{% include 'components/tool.html.j2' %}
+			<div class="navigation">
+				<a href="/">Predict</a>
+				<a href="/about" style="margin: 0 5px;">About</a>
+				<a href="/monitor">Monitor</a>
+			</div>
 
-			{% include 'components/blurb.html.j2' %}
-
-			{% include 'components/interactive.html.j2' %}
+			{% block content %}
+			{% endblock %}
 		</div>
 	</body>
 
