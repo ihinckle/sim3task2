@@ -1,3 +1,28 @@
+## 1. Project Overview
+The AI Content Authentication System (ACAS) is a specialized data product designed to distinguish between human-authored and AI-generated text. It supports the upload of EPUB files and provides a predictive verdict based on a trained Multinomial Naive Bayes machine learning pipeline.
+
+## 2. Prerequisites
+Before running the project, ensure your system meets the following requirements:
+    • Python: Version 3.14.0 or higher.
+    • Environment: A terminal or command prompt with administrative privileges to install packages.
+    • Dataset: Ensure AI_Human.csv.zip is present in the root directory if you intend to run the training notebook.
+
+## 3. Installation Steps
+Step 1: Extract the Project
+Unzip the project files into your desired working directory.
+Step 2: Set Up the Virtual Environment
+It is highly recommended to use a virtual environment to manage dependencies.
+
+### Create the virtual environment
+python -m venv .venv
+### Activate the environment (Windows)
+.venv\Scripts\activate
+### Activate the environment (macOS/Linux)
+source .venv/bin/activate
+Step 3: Install Dependencies
+Install the required Python packages using the provided requirements file:
+
+pip install -r requirements.txt
 
 ---
 
