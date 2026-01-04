@@ -24,6 +24,8 @@ def about_page():
 
 @book_bp.route('/monitor')
 def monitor_page():
+	errors = db.session.query(SosError).order_by(SosError.date.desc()).all()
+
 	return render_template('monitor.html.j2')
 
 

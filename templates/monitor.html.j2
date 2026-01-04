@@ -10,7 +10,16 @@
 		</thead>
 
 		<tbody>
-
+			{% for error in errors %}
+				<tr>
+					<td>{{ error.date.strftime('%Y-%m-%d %H:%M:%S') }}</td>
+					<td>{{ error.error }}</td>
+				</tr>
+			{% else %}
+				<tr>
+					<td colspan="2">No errors were found in the logs.</td>
+				</tr>
+			{% endfor %}
 		</tbody>
 	</table>
 {% endblock %}
